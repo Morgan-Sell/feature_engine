@@ -481,3 +481,30 @@ def test_fill_value_param_using_periods(df_time):
     print(df_tr.head())
     assert df_tr.head(6).round(2).equals(expected_results_df)
 
+def test_fill_value_param_using_periods(df_time):
+
+    expected_results = {
+        "ambient_temp": [31.31, 31.51, 32.15, 32.39, 32.62, 32.5],
+        "module_temp": [49.18, 49.84, 52.35, 50.63, 49.61, 47.01],
+        "irradiation": [0.51, 0.79, 0.65, 0.76, 0.42, 0.49],
+        "color": ['blue', 'blue', 'blue', 'blue', 'blue', 'blue'],
+        "module_temp_window_4_sum": ['fill', 'fill', 'fill', 'fill', 'fill', 202.0],
+        "module_temp_window_4_min": ['fill', 'fill', 'fill', 'fill', 'fill', 49.18],
+        "irradiation_window_4_sum": ['fill', 'fill', 'fill', 'fill', 'fill', 2.71],
+        "irradiation_window_4_min": ['fill', 'fill', 'fill', 'fill',  'fill', 0.51],
+    }
+
+    expected_results_df = pd.DataFrame(data=expected_results, index=df_time.index[:6])
+
+    # create transformer
+    transformer = WindowFeatures(
+        variables=["module_temp", "irradiation"],
+        window=4,
+        functions=["sum", "min"],
+        periods=2,
+        fill_value="fill",
+    )
+    df_tr = transformer.fit_transform(df_time)
+
+    print(df_tr.head())
+    assert df_tr.head(6).round(2).equals(expected_results_df)
