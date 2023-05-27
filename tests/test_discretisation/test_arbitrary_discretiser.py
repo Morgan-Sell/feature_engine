@@ -118,7 +118,14 @@ def test_error_when_nan_introduced_during_transform():
     assert str(record.value) == msg
 
 
-def test_error_if_not_permitted_value_is_errors():
+@pytest.mark.parametrize("_binning_dict", ["paella", (1, 2, 3), 1984]):
+def test_error_when_not_permitted_binning_dict(_binning_dict):
+    with pytest.raises(ValueError):
+        ArbitraryDiscretiser(binning_dict=_binning_dict)
+
+
+@pytest.mark.parametrize("_errors", ["medialuna", 43.2, 1, ["python", 88]])
+def test_error_when_not_permitted_errors(_errors):
     age_dict = {"Age": [0, 10, 20, 30, np.Inf]}
     with pytest.raises(ValueError):
-        ArbitraryDiscretiser(binning_dict=age_dict, errors="medialuna")
+        ArbitraryDiscretiser(binning_dict=age_dict, errors=_errors)
