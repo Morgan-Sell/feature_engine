@@ -118,7 +118,7 @@ def test_error_when_nan_introduced_during_transform():
     assert str(record.value) == msg
 
 
-@pytest.mark.parametrize("_binning_dict", ["paella", (1, 2, 3), 1984]):
+@pytest.mark.parametrize("_binning_dict", ["paella", (1, 2, 3), 1984])
 def test_error_when_not_permitted_binning_dict(_binning_dict):
     with pytest.raises(ValueError):
         ArbitraryDiscretiser(binning_dict=_binning_dict)
